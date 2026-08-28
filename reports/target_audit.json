@@ -1,0 +1,17 @@
+{
+  "rows_scanned": 2260701,
+  "rows_in_vintage": 235629,
+  "dropped_unresolved": 12526,
+  "dropped_unknown_status": 0,
+  "rows_final": 223103,
+  "status_counts_in_vintage": {
+    "Fully Paid": 181941,
+    "Charged Off": 41161,
+    "Current": 11919,
+    "Late (31-120 days)": 334,
+    "In Grace Period": 200,
+    "Late (16-30 days)": 73,
+    "Default": 1
+  },
+  "default_rate": 0.1844977431948472
+}
