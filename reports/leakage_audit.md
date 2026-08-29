@@ -16,10 +16,10 @@ change fails loudly instead of silently admitting an unvetted field.
 | `LEAK_PAYMENT` | 13 |
 | `LEAK_MONITORING` | 3 |
 | `LEAK_OUTCOME` | 21 |
-| `EMPTY_OR_CONST` | 34 |
+| `EMPTY_OR_CONST` | 35 |
 | `IDENTIFIER` | 6 |
 | `ANALYSIS_ONLY` | 2 |
-| `KEEP` | 71 |
+| `KEEP` | 70 |
 | **Total** | **152** |
 
 ## TARGET
@@ -119,6 +119,7 @@ change fails loudly instead of silently admitting an unvetted field.
 | `sec_app_collections_12_mths_ex_med` | 0.0 | 0% filled; no joint applications in 2014. |
 | `sec_app_mths_since_last_major_derog` | 0.0 | 0% filled; no joint applications in 2014. |
 | `hardship_flag` | 100.0 | Constant 'N' across all 223,103 rows in 2014; uninformative here. Would be LEAK_OUTCOME in a vintage where it varies. |
+| `disbursement_method` | 100.0 | Constant 'Cash' across all 223,103 rows in 2014 -- DirectPay launched later. Chosen at origination so the timing is legitimate, but it carries no variance to learn from in this vintage. |
 
 ## IDENTIFIER
 
@@ -212,4 +213,3 @@ change fails loudly instead of silently admitting an unvetted field.
 | `total_bal_ex_mort` | 100.0 | Bureau: total balance excluding mortgage, at application. |
 | `total_bc_limit` | 100.0 | Bureau: total bankcard limit at application. |
 | `total_il_high_credit_limit` | 100.0 | Bureau: total instalment high credit limit at application. |
-| `disbursement_method` | 100.0 | Cash vs DirectPay; chosen at origination. |

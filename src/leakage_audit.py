@@ -237,7 +237,7 @@ COLUMN_AUDIT: dict[str, tuple[str, str]] = {
     "total_bal_ex_mort": (KEEP, "Bureau: total balance excluding mortgage, at application."),
     "total_bc_limit": (KEEP, "Bureau: total bankcard limit at application."),
     "total_il_high_credit_limit": (KEEP, "Bureau: total instalment high credit limit at application."),
-    "disbursement_method": (KEEP, "Cash vs DirectPay; chosen at origination."),
+    "disbursement_method": (EMPTY_OR_CONST, "Constant 'Cash' across all 223,103 rows in 2014 -- DirectPay launched later. Chosen at origination so the timing is legitimate, but it carries no variance to learn from in this vintage."),
 }
 
 
