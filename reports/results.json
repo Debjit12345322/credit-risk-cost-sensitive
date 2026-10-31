@@ -1,0 +1,171 @@
+{
+  "primary_seed": {
+    "seed": 42,
+    "auc_lr": 0.7173415508237603,
+    "auc_lgbm": 0.7205821082480899,
+    "brier_lr": 0.1364070440186568,
+    "brier_lgbm": 0.13604432174835604,
+    "threshold_oof": 0.475,
+    "cost_fund_all": 1006.0512228430065,
+    "cost_at_0.5": 982.1687520655775,
+    "cost_oof_single": 983.1281163252509,
+    "cost_oof_per_term": 976.4077118666929,
+    "cost_oracle": 981.1966039712494,
+    "cost_lr_oof_single": 983.0318469337358,
+    "cost_assumed_70_5": 2102.28790657946,
+    "cost_assumed_loss70": 1177.4226281724082,
+    "cost_assumed_profit5": 1671.593215285689,
+    "gain_tuning_vs_0.5": -0.9593642596734071,
+    "gain_per_term": 6.720404458557937,
+    "gain_grade_thresholds": 2.193329722686485,
+    "gain_purpose_thresholds": 2.139141698240337,
+    "lr_minus_lgbm_cost": -0.0962693915150794,
+    "ratio_assumed_70_5": 2.138366171885531,
+    "ratio_loss70": 1.1976288833782862,
+    "ratio_profit5": 1.700280144091283
+  },
+  "in_sample_threshold": 0.375,
+  "per_term_thresholds": {
+    "36": 0.35,
+    "60": 0.475
+  },
+  "cost_rates": {
+    "36": {
+      "loss": 0.3446154343038582,
+      "profit": 0.15948941651996448
+    },
+    "60": {
+      "loss": 0.3521778898135087,
+      "profit": 0.29587540407144947
+    }
+  },
+  "sensitivity": {
+    "measured": {
+      "threshold": 0.475,
+      "true_cost": 983.1281163252509,
+      "decline_rate": 0.0338855421686747
+    },
+    "loss 70%, profit measured": {
+      "threshold": 0.25,
+      "true_cost": 1177.4226281724082,
+      "decline_rate": 0.2504482214572576
+    },
+    "loss measured, profit 5%": {
+      "threshold": 0.125,
+      "true_cost": 1671.593215285689,
+      "decline_rate": 0.5967799770510613
+    },
+    "loss 70%, profit 5%": {
+      "threshold": 0.06,
+      "true_cost": 2102.28790657946,
+      "decline_rate": 0.8652287722317843
+    }
+  },
+  "segment_thresholds": [
+    {
+      "segment": "term",
+      "apparent_gain_test_fitted": 7.985487197352995,
+      "honest_gain_oof_fitted": 6.720404458557937
+    },
+    {
+      "segment": "grade",
+      "apparent_gain_test_fitted": 5.100347131914987,
+      "honest_gain_oof_fitted": 2.193329722686485
+    },
+    {
+      "segment": "purpose",
+      "apparent_gain_test_fitted": 6.76012618768857,
+      "honest_gain_oof_fitted": 2.139141698240337
+    }
+  ],
+  "robustness": {
+    "auc_lr": {
+      "mean": 0.7187546821911314,
+      "std": 0.0025468136042427016
+    },
+    "auc_lgbm": {
+      "mean": 0.7221920811647198,
+      "std": 0.001958422791935722
+    },
+    "brier_lr": {
+      "mean": 0.1360003557563612,
+      "std": 0.0004434800972770141
+    },
+    "brier_lgbm": {
+      "mean": 0.1355984521992461,
+      "std": 0.00044301811296342935
+    },
+    "threshold_oof": {
+      "mean": 0.465,
+      "std": 0.018371173070873822
+    },
+    "cost_fund_all": {
+      "mean": 1002.5600932915783,
+      "std": 2.769566146997795
+    },
+    "cost_at_0.5": {
+      "mean": 978.967413601397,
+      "std": 3.397581334568238
+    },
+    "cost_oof_single": {
+      "mean": 975.1502042006668,
+      "std": 6.170472565900156
+    },
+    "cost_oof_per_term": {
+      "mean": 969.5992608565277,
+      "std": 5.740274976390311
+    },
+    "cost_oracle": {
+      "mean": 971.5152601168742,
+      "std": 5.862038266371309
+    },
+    "cost_lr_oof_single": {
+      "mean": 976.9283054189203,
+      "std": 4.229692010784976
+    },
+    "cost_assumed_70_5": {
+      "mean": 2077.392728370333,
+      "std": 23.723892742176105
+    },
+    "cost_assumed_loss70": {
+      "mean": 1206.8861148016806,
+      "std": 25.88936732297921
+    },
+    "cost_assumed_profit5": {
+      "mean": 1674.994992380479,
+      "std": 25.09674486997425
+    },
+    "gain_tuning_vs_0.5": {
+      "mean": 3.81720940073003,
+      "std": 4.570679067008552
+    },
+    "gain_per_term": {
+      "mean": 5.550943344139159,
+      "std": 1.1830855255847814
+    },
+    "gain_grade_thresholds": {
+      "mean": 1.9498406478638117,
+      "std": 2.198531584010678
+    },
+    "gain_purpose_thresholds": {
+      "mean": 1.1981710712033646,
+      "std": 3.738642706970735
+    },
+    "lr_minus_lgbm_cost": {
+      "mean": 1.7781012182534823,
+      "std": 5.0581526202371165
+    },
+    "ratio_assumed_70_5": {
+      "mean": 2.130393380181236,
+      "std": 0.02717825485841466
+    },
+    "ratio_loss70": {
+      "mean": 1.2377717644310835,
+      "std": 0.03233429027198063
+    },
+    "ratio_profit5": {
+      "mean": 1.71766570345869,
+      "std": 0.022027753033359302
+    }
+  }
+}

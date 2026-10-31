@@ -1,17 +1,676 @@
 {
-  "rows_scanned": 2260701,
-  "rows_in_vintage": 235629,
+  "source_rows": 2260701,
+  "vintage_year": 2014,
+  "vintage_rows": 235629,
   "dropped_unresolved": 12526,
   "dropped_unknown_status": 0,
-  "rows_final": 223103,
-  "status_counts_in_vintage": {
-    "Fully Paid": 181941,
-    "Charged Off": 41161,
-    "Current": 11919,
-    "Late (31-120 days)": 334,
-    "In Grace Period": 200,
-    "Late (16-30 days)": 73,
-    "Default": 1
+  "final_rows": 223103,
+  "default_rate": 0.1844977431948472,
+  "vintage_status_by_term": {
+    "36 months|Charged Off": 22315,
+    "36 months|Fully Paid": 140255,
+    "60 months|Charged Off": 18846,
+    "60 months|Current": 11919,
+    "60 months|Default": 1,
+    "60 months|Fully Paid": 41686,
+    "60 months|In Grace Period": 200,
+    "60 months|Late (16-30 days)": 73,
+    "60 months|Late (31-120 days)": 334
   },
-  "default_rate": 0.1844977431948472
+  "census": [
+    {
+      "year": 2007,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 45
+    },
+    {
+      "year": 2007,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Charged Off",
+      "n": 113
+    },
+    {
+      "year": 2007,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Fully Paid",
+      "n": 239
+    },
+    {
+      "year": 2007,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 206
+    },
+    {
+      "year": 2008,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 247
+    },
+    {
+      "year": 2008,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Charged Off",
+      "n": 249
+    },
+    {
+      "year": 2008,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Fully Paid",
+      "n": 582
+    },
+    {
+      "year": 2008,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 1315
+    },
+    {
+      "year": 2009,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 594
+    },
+    {
+      "year": 2009,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Charged Off",
+      "n": 129
+    },
+    {
+      "year": 2009,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Fully Paid",
+      "n": 436
+    },
+    {
+      "year": 2009,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 4122
+    },
+    {
+      "year": 2010,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 842
+    },
+    {
+      "year": 2010,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Charged Off",
+      "n": 158
+    },
+    {
+      "year": 2010,
+      "term": "36 months",
+      "status": "Does not meet the credit policy. Status:Fully Paid",
+      "n": 532
+    },
+    {
+      "year": 2010,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 7624
+    },
+    {
+      "year": 2010,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 645
+    },
+    {
+      "year": 2010,
+      "term": "60 months",
+      "status": "Does not meet the credit policy. Status:Charged Off",
+      "n": 112
+    },
+    {
+      "year": 2010,
+      "term": "60 months",
+      "status": "Does not meet the credit policy. Status:Fully Paid",
+      "n": 199
+    },
+    {
+      "year": 2010,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 2425
+    },
+    {
+      "year": 2011,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 1499
+    },
+    {
+      "year": 2011,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 12602
+    },
+    {
+      "year": 2011,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 1798
+    },
+    {
+      "year": 2011,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 5822
+    },
+    {
+      "year": 2012,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 5903
+    },
+    {
+      "year": 2012,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 37567
+    },
+    {
+      "year": 2012,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 2741
+    },
+    {
+      "year": 2012,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 7156
+    },
+    {
+      "year": 2013,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 12378
+    },
+    {
+      "year": 2013,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 88044
+    },
+    {
+      "year": 2013,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 8646
+    },
+    {
+      "year": 2013,
+      "term": "60 months",
+      "status": "Current",
+      "n": 6
+    },
+    {
+      "year": 2013,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 25736
+    },
+    {
+      "year": 2013,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 1
+    },
+    {
+      "year": 2013,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 3
+    },
+    {
+      "year": 2014,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 22315
+    },
+    {
+      "year": 2014,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 140255
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 18846
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Current",
+      "n": 11919
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Default",
+      "n": 1
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 41686
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 200
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Late (16-30 days)",
+      "n": 73
+    },
+    {
+      "year": 2014,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 334
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 42132
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "Current",
+      "n": 72
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 240894
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "In Grace Period",
+      "n": 9
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "Late (16-30 days)",
+      "n": 5
+    },
+    {
+      "year": 2015,
+      "term": "36 months",
+      "status": "Late (31-120 days)",
+      "n": 61
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 33671
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Current",
+      "n": 43227
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Default",
+      "n": 1
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 58848
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 603
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Late (16-30 days)",
+      "n": 274
+    },
+    {
+      "year": 2015,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 1298
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 46112
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Current",
+      "n": 86623
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Default",
+      "n": 8
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 186241
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "In Grace Period",
+      "n": 1096
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Late (16-30 days)",
+      "n": 584
+    },
+    {
+      "year": 2016,
+      "term": "36 months",
+      "status": "Late (31-120 days)",
+      "n": 2831
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 22130
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Current",
+      "n": 47438
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Default",
+      "n": 2
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 38612
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 697
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Late (16-30 days)",
+      "n": 318
+    },
+    {
+      "year": 2016,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 1715
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 25721
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Current",
+      "n": 183950
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Default",
+      "n": 13
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 102817
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "In Grace Period",
+      "n": 1860
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Late (16-30 days)",
+      "n": 957
+    },
+    {
+      "year": 2017,
+      "term": "36 months",
+      "status": "Late (31-120 days)",
+      "n": 5101
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 13427
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Current",
+      "n": 77901
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Default",
+      "n": 8
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 27335
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 1051
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Late (16-30 days)",
+      "n": 535
+    },
+    {
+      "year": 2017,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 2903
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Charged Off",
+      "n": 5464
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Current",
+      "n": 296050
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Default",
+      "n": 4
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Fully Paid",
+      "n": 35804
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "In Grace Period",
+      "n": 1869
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Late (16-30 days)",
+      "n": 999
+    },
+    {
+      "year": 2018,
+      "term": "36 months",
+      "status": "Late (31-120 days)",
+      "n": 4481
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Charged Off",
+      "n": 3403
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Current",
+      "n": 131131
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Default",
+      "n": 3
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Fully Paid",
+      "n": 11640
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "In Grace Period",
+      "n": 1050
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Late (16-30 days)",
+      "n": 604
+    },
+    {
+      "year": 2018,
+      "term": "60 months",
+      "status": "Late (31-120 days)",
+      "n": 2740
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 4
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 4
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 4
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 2
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 2
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 2
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 7
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 2
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 4
+    },
+    {
+      "year": null,
+      "term": "<NA>",
+      "status": "<NA>",
+      "n": 2
+    }
+  ]
 }
