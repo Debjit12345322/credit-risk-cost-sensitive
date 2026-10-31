@@ -274,3 +274,16 @@ def get_feature_columns(df: pd.DataFrame) -> list[str]:
 def get_analysis_columns(df: pd.DataFrame) -> list[str]:
     """Columns retained for segment-level error analysis but never modelled."""
     return [c for c in df.columns if COLUMN_AUDIT[c][0] == ANALYSIS_ONLY]
+
+
+LEAK_BUCKETS = {LEAK_PAYMENT, LEAK_MONITORING, LEAK_OUTCOME}
+
+
+def get_leak_columns(df: pd.DataFrame) -> list[str]:
+    """Columns classified as post-origination leakage.
+
+    Used only by the leakage demonstration, which adds these back to show what
+    the audit is worth. Never fed to a real model.
+    """
+    audit_columns(df)
+    return [c for c in df.columns if COLUMN_AUDIT[c][0] in LEAK_BUCKETS]

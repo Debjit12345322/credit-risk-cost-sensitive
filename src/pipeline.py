@@ -1,65 +1,59 @@
 """
 Model pipelines for the two baselines.
 
-THE PROBLEM THIS MODULE SOLVES
-------------------------------
-LightGBM handles NaN natively: at each split it learns a default direction for
-missing values. Logistic regression cannot accept NaN at all. So the two models
-cannot literally receive identical matrices, and a careless fix -- impute for LR,
-native NaN for LightGBM -- means the AUC comparison is measuring preprocessing
-rather than algorithms.
+WHAT IS BEING ESTIMATED
+-----------------------
+Both models estimate the class posterior p(x) = P(default = 1 | x). Both are
+DISCRIMINATIVE: they model the posterior directly rather than modelling the
+feature distribution per class and inverting it (which is what generative
+models such as Naive Bayes do). The decision rule built on top of p(x) lives in
+src/costs.py.
 
-THE RESOLUTION: IMPUTE AND INDICATE
------------------------------------
-Both models receive the nine `<col>_is_missing` indicators from
-`src.features`. Once the indicator is present, median imputation is no longer
-an assertion about the borrower -- the filled value is a placeholder, and the
-indicator lets the model correct for it. Logistic regression fits one
-coefficient on the value and another on the flag, which lets it express
-"use this number, unless it was missing, in which case shift the log-odds by
-beta_indicator". That is close to what LightGBM extracts from a native NaN
-split, so the remaining difference is the idiomatic treatment each algorithm
-needs rather than an information gap.
+THE NaN ASYMMETRY, AND HOW IT IS RESOLVED
+-----------------------------------------
+LightGBM handles NaN natively, learning a default split direction for missing
+values. Logistic regression cannot accept NaN at all. A careless fix -- impute
+for LR, native NaN for LightGBM -- would make the AUC comparison measure
+preprocessing rather than algorithms.
 
-What is being compared, stated plainly: two PIPELINES, each given the
-preprocessing its algorithm requires, both told exactly which values were
-missing. Not two algorithms on identical matrices -- that comparison is not
-available, because handling missingness IS part of what a GBM does.
+Resolution: IMPUTE AND INDICATE. Both models receive the nine
+`<col>_is_missing` flags from src/features.py. Once the flag is present, median
+imputation is a placeholder rather than an assertion about the borrower: LR fits
+one coefficient on the value and one on the flag, which lets it express "use
+this number, unless it was missing, in which case shift the log-odds". That is
+close to what LightGBM extracts from a native NaN split.
 
-WHY THERE IS NO CLASS WEIGHTING OR RESAMPLING
----------------------------------------------
-The default rate is 18.45%, and the reflex is `class_weight='balanced'` or
-SMOTE. Both are declined deliberately.
+What is compared, stated plainly: two PIPELINES, each given the preprocessing
+its algorithm requires, both told exactly which values were missing.
 
-Class weighting distorts predicted probabilities away from the true base rate.
-A model trained with balanced weights will output something near 0.5 for an
-average loan rather than near 0.18. Requirement 5 chooses a decision threshold
-by minimising expected cost, and requirement 6 checks whether the predicted
-probabilities are calibrated. Both depend on the probabilities meaning what
-they say.
-
-Asymmetric costs are a property of the DECISION, not of the training data.
-Handling them by reweighting the loss AND by tuning the threshold double-counts
-the same asymmetry. The cleaner separation: train on the natural class balance
-so probabilities stay calibrated, then move the threshold to reflect the cost
-matrix. This also makes the threshold choice auditable -- it is one number with
-an explicit cost justification, not an interaction between a sampling scheme
-and a cutoff.
+NO CLASS WEIGHTING, NO RESAMPLING
+---------------------------------
+`class_weight='balanced'` and SMOTE shift predicted probabilities away from the
+true base rate: a balanced model outputs ~0.5 for an average loan rather than
+~0.18. The expected-cost threshold and the calibration check both need p(x) to
+mean what it says. Asymmetric cost is a property of the DECISION, not of the
+training data; handling it by reweighting AND by moving the threshold would
+double-count the same asymmetry.
 
 COLLINEARITY CAVEAT
 -------------------
-`grade`, `sub_grade`, and `int_rate` are near-deterministic functions of one
-another: LendingClub assigns the sub-grade, which sets the rate. All three are
-kept because a lender genuinely observes all three at decision time, but the
-consequence is that INDIVIDUAL LOGISTIC REGRESSION COEFFICIENTS ON THESE THREE
-ARE NOT INTERPRETABLE. L2 regularisation splits the shared signal among them
-arbitrarily. Predictions and AUC are unaffected; coefficient sign and magnitude
-for this group are not to be read as effects.
+`grade`, `sub_grade` and `int_rate` are near-deterministic functions of one
+another. All three are kept because an investor observes all three, but the
+INDIVIDUAL LOGISTIC COEFFICIENTS ON THEM ARE NOT INTERPRETABLE -- L2
+regularisation splits their shared signal arbitrarily. Predictions are
+unaffected.
+
+LEAKAGE INSIDE THE PIPELINE
+---------------------------
+Imputation medians, scaling parameters and one-hot vocabularies are fitted
+INSIDE the sklearn Pipeline, i.e. on training rows only. Fitting them on the
+full dataset before splitting would leak the test distribution into training.
 """
 
 from __future__ import annotations
 
 import lightgbm as lgb
+import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -68,26 +62,23 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+from src.config import LGBM_PARAMS, SEED, TEST_SIZE
 from src.features import engineer_features
 from src.leakage_audit import get_feature_columns
 
-SEED = 42
-TEST_SIZE = 0.25
-
-# Raw columns replaced by parsed/derived equivalents in src.features.
-# Keeping both would double-count the same information.
+# Raw columns replaced by parsed equivalents in src/features.py.
+# Keeping both would feed the same information twice.
 SUPERSEDED_BY_DERIVED = ["term", "emp_length", "earliest_cr_line"]
 
 
 def build_feature_frame(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str], list[str]]:
-    """Apply feature engineering and return (X, numeric_cols, categorical_cols).
+    """Audited KEEP columns + engineered columns - superseded raw columns.
 
-    The audited KEEP list plus engineered columns, minus the raw columns their
-    derived versions replace.
+    Returns (X, numeric_columns, categorical_columns).
     """
-    out, new_cols = engineer_features(df)
+    out, engineered = engineer_features(df)
     features = [c for c in get_feature_columns(df) if c not in SUPERSEDED_BY_DERIVED]
-    features = features + new_cols
+    features += engineered
 
     X = out[features]
     numeric = [c for c in features if pd.api.types.is_numeric_dtype(X[c])]
@@ -95,99 +86,65 @@ def build_feature_frame(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str], list
     return X, numeric, categorical
 
 
-def make_split(X: pd.DataFrame, y: pd.Series, seed: int = SEED):
-    """Stratified train/test split.
+def split_indices(y: pd.Series, seed: int = SEED) -> tuple[np.ndarray, np.ndarray]:
+    """Stratified train/test split, returned as POSITIONAL INDICES.
 
-    Stratified rather than time-ordered: this is a single origination vintage,
-    so there is no meaningful time axis to hold out along. Stratification keeps
-    the 18.45% default rate identical in both folds, which matters because the
-    cost-optimal threshold is sensitive to the base rate.
+    Indices rather than frames, because the cost model needs columns that are
+    NOT features (amount funded, realised payments). Splitting by index keeps
+    every array -- features, target, costs -- aligned to the same rows.
+
+    Stratified rather than time-ordered: within a single vintage there is no
+    meaningful time axis to hold out along. Stratification keeps the default
+    rate identical in both halves, which matters because the cost-optimal
+    threshold is sensitive to the base rate.
     """
-    return train_test_split(
-        X, y, test_size=TEST_SIZE, stratify=y, random_state=seed
+    positions = np.arange(len(y))
+    train_idx, test_idx = train_test_split(
+        positions, test_size=TEST_SIZE, stratify=y, random_state=seed
     )
+    return np.sort(train_idx), np.sort(test_idx)
 
 
 def build_lr_pipeline(numeric: list[str], categorical: list[str], seed: int = SEED) -> Pipeline:
-    """Logistic regression with imputation, scaling, and one-hot encoding.
-
-    Every preprocessing step lives INSIDE the Pipeline so that medians, scaling
-    parameters, and category vocabularies are fitted on training data only.
-    Imputing before splitting would leak test-set distribution into training --
-    a quieter version of the same error the leakage audit exists to catch.
-
-    `handle_unknown='ignore'` guards against a category appearing in test but
-    not train; it encodes as all-zeros rather than raising.
-    """
+    """Logistic regression: impute, scale, one-hot -- all fitted on training rows."""
     numeric_steps = Pipeline(
-        [
-            ("impute", SimpleImputer(strategy="median")),
-            ("scale", StandardScaler()),
-        ]
+        [("impute", SimpleImputer(strategy="median")), ("scale", StandardScaler())]
     )
     categorical_steps = Pipeline(
         [
             ("impute", SimpleImputer(strategy="most_frequent")),
+            # Unseen test categories encode as all-zeros instead of raising.
             ("encode", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
         ]
     )
-
-    preprocessor = ColumnTransformer(
-        [
-            ("num", numeric_steps, numeric),
-            ("cat", categorical_steps, categorical),
-        ]
+    preprocess = ColumnTransformer(
+        [("num", numeric_steps, numeric), ("cat", categorical_steps, categorical)]
     )
-
     return Pipeline(
         [
-            ("prep", preprocessor),
-            (
-                "model",
-                LogisticRegression(
-                    max_iter=2000,
-                    random_state=seed,
-                    # L2 by default. Needed here because grade/sub_grade/int_rate
-                    # are near-collinear (see module docstring).
-                ),
-            ),
+            ("prep", preprocess),
+            # L2 (the default) is needed: grade / sub_grade / int_rate are collinear.
+            ("model", LogisticRegression(max_iter=2000, random_state=seed)),
         ]
     )
 
 
 def build_lgbm_model(seed: int = SEED) -> lgb.LGBMClassifier:
-    """LightGBM using native NaN and native categorical handling.
+    """LightGBM with native NaN and native categorical handling.
 
-    No imputation: the model learns a default split direction for missing
-    values, which is strictly more expressive than filling with a median.
-    Categoricals are passed as pandas `category` dtype and handled natively
-    rather than one-hot encoded, which is why LightGBM was chosen over XGBoost
-    for this project.
-
-    Hyperparameters are deliberately modest and untuned. This is a BASELINE;
-    the project's contribution is the decision layer, not a leaderboard score.
-    Tuning would also need a separate validation fold to avoid selecting on the
-    test set.
+    Hyperparameters are modest and UNTUNED on purpose. Tuning needs its own
+    validation split to avoid selecting on the test set, and the project's
+    contribution is the decision layer, not a leaderboard score.
     """
-    return lgb.LGBMClassifier(
-        n_estimators=400,
-        learning_rate=0.05,
-        num_leaves=31,
-        min_child_samples=50,
-        subsample=0.8,
-        subsample_freq=1,
-        colsample_bytree=0.8,
-        random_state=seed,
-        verbose=-1,
-    )
+    return lgb.LGBMClassifier(random_state=seed, **LGBM_PARAMS)
 
 
 def to_lgbm_frame(X: pd.DataFrame, categorical: list[str]) -> pd.DataFrame:
-    """Cast categorical columns to pandas `category` dtype for LightGBM.
+    """Cast categoricals to pandas `category` dtype for LightGBM.
 
-    Categories are taken from the full frame before splitting so that train and
-    test share a vocabulary. This is safe: it uses only the SET of category
-    labels, never the target, so no outcome information crosses the split.
+    Call this on the FULL frame, BEFORE splitting, so train and test share one
+    category vocabulary. Safe: it uses only the set of category labels, never
+    the target, so no outcome information crosses the split.
     """
     out = X.copy()
     for c in categorical:

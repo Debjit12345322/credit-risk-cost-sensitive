@@ -1,12 +1,20 @@
+# Data: not ours to redistribute, and too large for git history
 data/
 *.csv
 *.csv.gz
+*.zip
 *.parquet
 
+# Python
 __pycache__/
 *.pyc
+.pytest_cache/
 .ipynb_checkpoints/
 .venv/
 venv/
 
+# Credentials: the Kaggle token lives in ~/.kaggle, but never let one in here
+kaggle.json
+
+# OS
 .DS_Store

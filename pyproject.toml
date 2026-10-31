@@ -1,0 +1,4 @@
+[tool.pytest.ini_options]
+# Lets tests import `src.*` without installing the project as a package.
+pythonpath = ["."]
+testpaths = ["tests"]
